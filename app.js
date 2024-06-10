@@ -63,7 +63,6 @@ const corsOptions ={
    optionSuccessStatus:200,
 }
 
-app.use(cors(corsOptions))
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
