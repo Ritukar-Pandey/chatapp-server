@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import { v4 as uuid } from "uuid";
-// import cors from "cors";
+import cors from "cors";
 import { v2 as cloudinary } from "cloudinary";
 import {
   CHAT_JOINED,
@@ -31,7 +31,7 @@ dotenv.config({
 });
 
 const mongoURI = process.env.MONGO_URI;
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const envMode = process.env.NODE_ENV.trim() || "PRODUCTION";
 const adminSecretKey = process.env.ADMIN_SECRET_KEY || "adsasdsdfsdfsdfd";
 const userSocketIDs = new Map();
@@ -47,6 +47,9 @@ cloudinary.config({
 
 const app = express();
 const server = createServer(app);
+
+app.use(cors(corsOptions));
+
 const io = new Server(server, {
   cors: corsOptions,
 });
@@ -56,13 +59,6 @@ app.set("io", io);
 // Using Middlewares Here
 app.use(express.json());
 app.use(cookieParser());
-const cors=require("cors");
-const corsOptions ={
-   origin:'*', 
-   credentials:true,            //access-control-allow-credentials:true
-   optionSuccessStatus:200,
-}
-
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
