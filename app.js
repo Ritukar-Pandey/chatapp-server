@@ -56,7 +56,17 @@ app.set("io", io);
 // Using Middlewares Here
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(corsOptions));
+app.use((req,res,next)=>{
+  const origin = req.headers.origin;
+  if (process.env.allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header(
+      "Access-Control-Allow-Headers",
+      "Origin,X-Requested-With,Content-Type,Accept"
+  );
+  next();
+})
 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/chat", chatRoute);
